@@ -1,5 +1,5 @@
 variable "owner" {
-  default = "Blue Team"
+  default = "DSW"
 }
 
 variable "aws_account_owner" {
