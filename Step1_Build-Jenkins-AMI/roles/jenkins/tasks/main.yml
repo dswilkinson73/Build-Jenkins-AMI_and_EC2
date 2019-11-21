@@ -1,0 +1,168 @@
+---
+# tasks file for roles/jenkins
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+
+
+- name: Install wget, curl, unzip, make
+  apt:
+    name: "{{ util_packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    util_packages:
+      - wget
+      - unzip
+      - make
+      - curl
+
+- name: Download aws-iam-authenticator
+  get_url: url="https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator"
+           dest="/usr/local/src/aws-iam-authenticator"
+
+- name: Install the aws-iam-authenticator
+  copy:
+    src: /usr/local/src/aws-iam-authenticator
+    dest: /usr/local/bin/aws-iam-authenticator
+    remote_src: yes 
+    mode: '0755'
+
+- name: Install Java runtime environment
+  become: true
+  package:
+    name: default-jre
+    state: present
+
+- name: Adding the ansible repository
+  apt_repository:
+    repo: ppa:ansible/ansible
+
+- name: Install Ansible
+  become: true
+  package: 
+    name: ansible
+    state: present
+
+- name: Install prerequisites for Docker
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg2' ,'software-properties-common']
+    update_cache: yes
+
+- name: Add Docker GPG key
+  apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/{{ansible_distribution|lower}} {{ansible_distribution_release}} stable
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    update_cache: yes
+
+- name: Adding apt signing key for Kubernetes
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Adding apt repository for Kubernetes
+  apt_repository: 
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes.list
+
+- name: Install Kubernetes
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+      - kubelet
+      - kubeadm
+      - kubectl
+
+- name: Download Packer
+  get_url: url="https://releases.hashicorp.com/packer/1.4.4/packer_1.4.4_linux_amd64.zip"
+           dest="/usr/local/src/packer_1.4.4_linux_amd64.zip"
+
+
+- name: Extract and Install Packer
+  unarchive: src="/usr/local/src/packer_1.4.4_linux_amd64.zip"
+             dest=/usr/local/bin
+             copy=no
+
+- name: Determine Terraform checksums
+  uri: url="https://releases.hashicorp.com/terraform/0.12.16/terraform_0.12.16_SHA256SUMS"
+       method="GET"
+       return_content=True
+  register: terraform_checksums
+
+
+- name: Download Terraform
+  get_url: url="https://releases.hashicorp.com/terraform/0.12.16/terraform_0.12.16_linux_amd64.zip"
+           dest="/usr/local/src/terraform_0.12.16_linux_amd64.zip"
+           checksum="sha256:{{ item.split(' ') | first }}"
+  with_items: "{{ terraform_checksums.content.split('\n') | select('search', 'linux_amd64') | list | first }}"
+  register: terraform_downloaded
+
+
+- name: Extract and install Terraform
+  unarchive: src="/usr/local/src/terraform_0.12.16_linux_amd64.zip"
+             dest=/usr/local/bin
+             copy=no
+
+- name: Download jenkins WAR file into /usr/local/etc
+  get_url:
+    url: 'http://mirrors.jenkins.io/war-stable/latest/jenkins.war'
+    dest: /usr/local/etc
+
+- name: Setup Jenkins service - service started in handlers/main.yml so doesnt need path
+  template:
+    dest: /etc/systemd/system/jenkins.service
+    src: jenkins.service
+#    src: roles/jenkins/templates/jenkins.service
+  notify:
+    - restart jenkins service
+
+# Use the flush_handlers 
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  meta: flush_handlers
+
+- name: Wait until the /root/.jenkins/secrets/initialAdminPassword is populated
+  wait_for:
+    path: /root/.jenkins/secrets/initialAdminPassword
+
+- name:  Display Jenkins Password
+  shell: cat /root/.jenkins/secrets/initialAdminPassword
+  register: initialAdminPassword
+
+- debug:
+    var: initialAdminPassword.stdout
+#   msg: InitialAdminPaaword {{ initialAdminPassword.stdout }}
+#    verbosity: 2
+
+- name: Start Jenkins at boot
+  systemd: 
+    enabled: true
+    name: jenkins
+  
+##- name: After 5s, Wait for Jenkins port 8080 to become open on the host
+##  wait_for:
+##    host: "{{ inventory_hostname }}"
+##    port: 8080
+##    delay: 5
+#  delegate_to: localhost
+
+#- name: Check that jenkins page returns a 200 status
+#  uri: "{{ inventory_hostname }}:8080"
+#    return_content: yes
+#  register: return_data
+#  failed_when: "'200' not in return_data.status"
+
+#- name: Wait for jenkins to boot
+#  wait_for:
+#    path: /var/log/jenkins.log
+#    search_regex: "INFO: Jenkins is fully up and running"
+

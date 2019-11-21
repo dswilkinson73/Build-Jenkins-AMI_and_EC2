@@ -1,0 +1,34 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+    stages {
+        stage('Initialise') {
+            steps {
+		      sh 'rm -rf fleetmaninfra'
+              	      sh 'git clone https://github.com/kseve1/fleetmaninfra.git'
+		      echo "Initialising job - cloning repo"
+                      dir("fleetmaninfra/packer/jenkins-ec2") {
+                      sh 'pwd'
+                  }
+            }
+        }
+        stage('Validate') {
+            steps {
+                      dir("fleetmaninfra/packer/jenkins-ec2") {
+                      echo "Validating PACKER json..."
+                      sh 'packer validate packer_jenkins_ami.json'
+                  }
+		      
+            }
+        }
+        stage('Deploy') {
+            steps {
+                     dir("fleetmaninfra/packer/jenkins-ec2") {
+                     echo "Deploying AMI to AWS..."
+                     sh 'packer build packer_jenkins_ami.json'
+                }
+            }
+        }
+    }
+}
