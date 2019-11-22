@@ -13,3 +13,7 @@ variable "to_port" {
 variable "ingress_ip" {
   default = ["185.46.212.0/22"]
 }
+
+variable "ingress_home_ip" {
+  default = ["77.172.243.125/32"]
+}
