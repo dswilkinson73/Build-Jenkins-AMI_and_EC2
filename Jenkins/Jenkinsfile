@@ -5,17 +5,17 @@ pipeline {
     stages {
         stage('Initialise') {
             steps {
-		      sh 'rm -rf fleetmaninfra'
-              	      sh 'git clone https://github.com/kseve1/fleetmaninfra.git'
+		      sh 'rm -rf Build-Jenkins-AMI_and_EC2'
+              	      sh 'git clone https://github.com/dswilkinson73/Build-Jenkins-AMI_and_EC2.git'
 		      echo "Initialising job - cloning repo"
-                      dir("fleetmaninfra/packer/jenkins-ec2") {
+                      dir("Build-Jenkins-AMI_and_EC2/Step1_Build-Jenkins-AMI") {
                       sh 'pwd'
                   }
             }
         }
         stage('Validate') {
             steps {
-                      dir("fleetmaninfra/packer/jenkins-ec2") {
+                      dir("Build-Jenkins-AMI_and_EC2/Step1_Build-Jenkins-AMI") {
                       echo "Validating PACKER json..."
                       sh 'packer validate packer_jenkins_ami.json'
                   }
@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                     dir("fleetmaninfra/packer/jenkins-ec2") {
+                     dir("Build-Jenkins-AMI_and_EC2/Step1_Build-Jenkins-AMI") {
                      echo "Deploying AMI to AWS..."
                      sh 'packer build packer_jenkins_ami.json'
                 }
