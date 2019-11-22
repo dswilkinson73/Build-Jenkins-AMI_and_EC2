@@ -17,6 +17,11 @@
       - make
       - curl
 
+- name: Install the AWS CLI
+  apt:
+    name: awscli
+    update_cache: yes
+
 - name: Download aws-iam-authenticator
   get_url: url="https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator"
            dest="/usr/local/src/aws-iam-authenticator"
