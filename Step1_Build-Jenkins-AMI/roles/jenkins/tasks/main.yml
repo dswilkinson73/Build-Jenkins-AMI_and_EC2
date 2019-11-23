@@ -6,7 +6,6 @@
 
 
 - name: Install wget, curl, unzip, make
-  sudo: True
   apt:
     name: "{{ util_packages }}"
     state: present
