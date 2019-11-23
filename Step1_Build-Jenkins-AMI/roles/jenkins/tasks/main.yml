@@ -9,7 +9,7 @@
   apt:
     name: "{{ util_packages }}"
     state: present
-    update_cache: yes
+    update_cache: no
   vars:
     util_packages:
       - wget
@@ -20,7 +20,7 @@
 - name: Install the AWS CLI
   apt:
     name: awscli
-    update_cache: yes
+    update_cache: no
 
 - name: Download aws-iam-authenticator
   get_url: url="https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator"
