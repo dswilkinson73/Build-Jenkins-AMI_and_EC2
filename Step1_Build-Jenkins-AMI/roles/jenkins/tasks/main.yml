@@ -1,8 +1,20 @@
 ---
 # tasks file for roles/jenkins
+- name: Install Java runtime environment
+  become: true
+  package:
+    name: default-jre
+    state: present
+
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
+
+- name: Install Java runtime environment
+  become: true
+  package:
+    name: default-jre
+    state: present
 
 - name: Install wget
   apt:
@@ -35,12 +47,6 @@
     dest: /usr/local/bin/aws-iam-authenticator
     remote_src: yes 
     mode: '0755'
-
-- name: Install Java runtime environment
-  become: true
-  package:
-    name: default-jre
-    state: present
 
 - name: Adding the ansible repository
   apt_repository:
