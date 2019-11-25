@@ -20,26 +20,12 @@
     },
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
-    "ami_name": "blue-teams-jenkins-image-{{timestamp}}",
+    "ami_name": "Jenkins-Image-{{timestamp}}",
     "tags": {
-       "Name": "Blue-team-jenkins-with-tooling"
+       "Name": "Jenkins-Server"
     }
   }],
   "provisioners": [{
-    "type": "shell",
-    "scripts": 
-       [
-       "./install_updates.sh",
-       ]
-   },
-   {
-    "type": "shell",
-    "inline": 
-       [    
-       "sudo apt update",
-       ]
-   },
-   {
       "type": "ansible",
       "playbook_file": "./jenkins.yml",
       "extra_arguments": [ "-b" ]
