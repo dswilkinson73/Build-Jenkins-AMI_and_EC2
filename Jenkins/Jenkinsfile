@@ -17,7 +17,7 @@ pipeline {
             steps {
                       dir("Build-Jenkins-AMI_and_EC2/Step1_Build-Jenkins-AMI") {
                       echo "Validating PACKER json..."
-                      sh 'packer validate dsw_jenkins_ami.json'
+                      sh 'packer validate packer_jenkins_ami.json'
                   }
 		      
             }
@@ -26,7 +26,7 @@ pipeline {
             steps {
                      dir("Build-Jenkins-AMI_and_EC2/Step1_Build-Jenkins-AMI") {
                      echo "Deploying AMI to AWS..."
-                     sh 'packer build dsw_jenkins_ami.json'
+                     sh 'packer build packer_jenkins_ami.json'
                 }
             }
         }
