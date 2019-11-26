@@ -2,7 +2,11 @@
 # tasks file for roles/jenkins
 - name: This is a test
   shell:
-    cmd: ls -l 
+    cmd: ls -al > /tmp/test.txt
+
+- name: This is a test 2222
+  shell:
+    cmd: cat /tmp/test.txt
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
