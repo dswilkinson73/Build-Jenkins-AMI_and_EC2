@@ -12,8 +12,11 @@
 - name: Executing a command using command module
   command: cat temp.txt
 
-- name: rm
+- name: rm /var/lib/apt/lists/*
   shell: sudo rm -rf /var/lib/apt/lists/*
+
+- name: apt-get clean
+  shell: sudo apt-get clean
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
