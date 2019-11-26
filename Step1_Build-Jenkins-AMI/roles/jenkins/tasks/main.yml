@@ -1,5 +1,9 @@
 ---
 # tasks file for roles/jenkins
+- name: This is a test
+  shell:
+    cmd: ls -l 
+
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
