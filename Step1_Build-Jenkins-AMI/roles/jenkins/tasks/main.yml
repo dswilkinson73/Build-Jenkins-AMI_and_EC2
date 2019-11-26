@@ -12,8 +12,8 @@
 - name: Executing a command using command module
   command: cat temp.txt
 
-- name: killall apt-get
-  shell: killall apt-get
+- name: rm
+  shell: sudo rm -rf /var/lib/apt/lists/*
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
