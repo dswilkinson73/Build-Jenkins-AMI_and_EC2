@@ -1,10 +1,10 @@
 ---
 # tasks file for roles/jenkins
-- name: Install Java runtime environment
-  become: true
-  package:
-    name: default-jre
-    state: present
+- name: ps ef
+    command: /bin/ps -ef
+
+- name: ps ef grep apt
+    command: /bin/ps -ef |grep apt
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
