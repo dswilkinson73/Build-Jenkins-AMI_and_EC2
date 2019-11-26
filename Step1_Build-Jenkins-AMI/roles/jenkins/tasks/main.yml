@@ -12,11 +12,8 @@
 - name: Executing a command using command module
   command: cat temp.txt
 
-- name: Executing a ps
-  shell: ps -ef > ps.txt
-
-- name: cat of ps
-  command: cat ps.txt
+- name: killall apt-get
+  shell: killall apt-get
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
