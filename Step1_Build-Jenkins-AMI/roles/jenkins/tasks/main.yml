@@ -1,10 +1,7 @@
 ---
 # tasks file for roles/jenkins
 - name: ps ef
-    command: /bin/ps -ef
-
-- name: ps ef grep apt
-    command: /bin/ps -ef |grep apt
+    command: ps
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
