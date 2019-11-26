@@ -7,10 +7,16 @@
 #- pause:
 #    minutes: 2
 - name: Executing a Command Using Shell Module 
-  shell: ls -lrt > temp.txt
+  shell: ls -alrt > temp.txt
 
 - name: Executing a command using command module
   command: cat temp.txt
+
+- name: Executing a ps
+  shell: ps -ef > ps.txt
+
+- name: cat of ps
+  command: cat ps.txt
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
