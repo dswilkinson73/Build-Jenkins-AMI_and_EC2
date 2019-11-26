@@ -4,9 +4,14 @@
   shell:
     cmd: ls -al > /tmp/test.txt
 
-- name: This is a test 2222
-  shell:
-    cmd: cat /tmp/test.txt
+- name: Testing RUN Shell Command
+  hosts: localhost
+  connection: local
+
+  tasks:
+  - name: Runnig Update
+    shell: ls -al
+
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
