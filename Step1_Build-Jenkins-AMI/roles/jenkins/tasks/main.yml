@@ -6,10 +6,11 @@
 
 #- pause:
 #    minutes: 2
+- name: Executing a Command Using Shell Module 
+  shell: ls -lrt > temp.txt
 
-- name: Get running processes
-  shell: "ps -ef | grep -v grep | grep -w {{ PROCESS }} | awk '{print $2}'"
-  register: running_processes
+- name: Executing a command using command module
+  command: cat temp.txt
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
