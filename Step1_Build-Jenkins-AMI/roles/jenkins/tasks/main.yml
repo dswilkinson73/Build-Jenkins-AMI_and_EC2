@@ -4,10 +4,6 @@
   shell:
     cmd: ls -al
 
-- name: Added a delay
-    wait_for:
-      delay: 20
-
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
