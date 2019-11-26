@@ -2,7 +2,11 @@
 # tasks file for roles/jenkins
 - name: This is a test
   shell:
-    cmd: wait 20
+    cmd: ls -al
+
+- name: Added a delay
+    wait_for:
+      delay: 20
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
