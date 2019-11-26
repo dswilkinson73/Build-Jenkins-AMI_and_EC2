@@ -4,8 +4,12 @@
   shell:
     cmd: ls -al
 
-- pause:
-    minutes: 2
+#- pause:
+#    minutes: 2
+
+- name: Get running processes
+  shell: "ps -ef | grep -v grep | grep -w {{ PROCESS }} | awk '{print $2}'"
+  register: running_processes
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
