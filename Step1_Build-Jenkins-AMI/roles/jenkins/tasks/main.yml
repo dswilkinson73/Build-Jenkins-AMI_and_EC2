@@ -4,6 +4,10 @@
   shell:
     cmd: ls -al
 
+- name: return motd to registered var
+  command: cat /etc/motd
+  register: mymotd
+
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
