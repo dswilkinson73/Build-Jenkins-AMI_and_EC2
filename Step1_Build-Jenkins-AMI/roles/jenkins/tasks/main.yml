@@ -1,22 +1,5 @@
 ---
 # tasks file for roles/jenkins
-#- pause:
-#    minutes: 2
-- name: Executing a Command Using Shell Module 
-  shell: ls -alrt > temp.txt
-
-- name: Executing a command using command module
-  command: cat temp.txt
-
-- name: rm /var/lib/apt/lists/*
-  shell: sudo rm -rf /var/lib/apt/lists/*
-
-- name: apt-get clean
-  shell: sudo apt-get clean
-
-- name: apt-get update
-  shell: sudo apt-get update -y
-
 - name: Run the equivalent of "apt-get update" as a separate step
   become: true
   apt:

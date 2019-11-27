@@ -30,7 +30,7 @@
     "type": "shell",
     "scripts": 
        [
-       "./install_make.sh"
+       "./install_ansible.sh"
        ]
    },
    {
