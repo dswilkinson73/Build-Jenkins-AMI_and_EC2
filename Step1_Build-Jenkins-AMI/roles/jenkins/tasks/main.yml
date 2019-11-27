@@ -23,7 +23,7 @@
     update_cache: yes
 
 - name: Install Java runtime environment
-  become: true
+  become: yes
   package:
     name: default-jre
     state: present
