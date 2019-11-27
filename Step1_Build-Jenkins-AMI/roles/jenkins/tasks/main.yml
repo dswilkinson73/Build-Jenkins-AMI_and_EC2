@@ -1,9 +1,5 @@
 ---
 # tasks file for roles/jenkins
-- name: This is a test
-  shell:
-    cmd: ls -al
-
 #- pause:
 #    minutes: 2
 - name: Executing a Command Using Shell Module 
@@ -22,6 +18,7 @@
   shell: sudo apt-get update -y
 
 - name: Run the equivalent of "apt-get update" as a separate step
+  become: true
   apt:
     update_cache: yes
 
