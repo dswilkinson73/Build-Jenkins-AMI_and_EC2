@@ -18,6 +18,9 @@
 - name: apt-get clean
   shell: sudo apt-get clean
 
+- name: apt-get update
+  shell: sudo apt-get update -y
+
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
